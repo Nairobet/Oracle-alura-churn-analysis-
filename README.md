@@ -27,9 +27,7 @@ Realizar modelado predictivo, análisis de drivers y reporting estratégico que 
 - Perfil Cliente (sin internet -19%)
 - Contrato vs Cargo heatmap
 
-**Todas disponibles** en informe_final.html (responsive).
-[Abrir Informe C-Level](informe_final_TelecomX.html)
-
+**Todas disponibles** en informe_final.html  
 
 Análisis predictivo churn 2025. Driver #1: **contrato mes (+47%)**.
 
