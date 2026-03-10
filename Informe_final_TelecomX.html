@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Final – Análisis de Churn Telecom X</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: #1a237e;
+            font-weight: 700;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+        }
+
+        .section {
+            background: #ffffff;
+            padding: 25px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0d47a1;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #E3F2FD;
+        }
+
+        .img-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 15px;
+        }
+
+        img {
+            max-width: 90%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+            font-family: Arial;
+        }
+
+        th {
+            background-color: #E3F2FD !important;
+            color: #1976D2 !important;
+            font-weight: bold !important;
+            font-size: 12pt !important;
+            text-align: center !important;
+            padding: 12px !important;
+            border: 1px solid #E0E0E0 !important;
+        }
+
+        td {
+            font-size: 11pt !important;
+            padding: 12px 10px !important;
+            text-align: center !important;
+            border: 1px solid #E0E0E0 !important;
+        }
+
+        caption {
+            font-size: 16pt !important;
+            font-weight: bold !important;
+            color: #D32F2F !important;
+            padding: 15px !important;
+            text-align: center !important;
+        }
+
+        ul {
+            background: #f1f5f9;
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #dc2626;
+        }
+
+        li {
+            margin: 12px 0;
+        }
+
+        code {
+            background: #1e293b;
+            color: #00d4aa;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Informe Final – Análisis de Evasión de Clientes (Churn) en Telecom X</h1>
+
+<div class="section">
+    <h2>1. Resumen Ejecutivo</h2>
+    <p>
+        Telecom X presenta una tasa de abandono del <strong>26.6%</strong>, equivalente a que 
+        <strong>1 de cada 4 clientes</strong> cancela el servicio. Este nivel es alto para la industria 
+        y requiere identificar los factores que impulsan el churn.
+    </p>
+    <p>
+        El análisis exploratorio permitió detectar cinco drivers principales:
+        tipo de contrato, antigüedad, cargo mensual, método de pago y perfil familiar.
+    </p>
+</div>
+
+<div class="section">
+    <h2>2. Objetivo del Proyecto</h2>
+    <p>
+        Analizar los datos de clientes de Telecom X para identificar patrones de abandono,
+        preparar un dataset limpio para modelos predictivos y generar insights accionables.
+    </p>
+</div>
+
+<div class="section">
+    <h2>3. Metodología</h2>
+    
+    <h3 class="subtitle">3.1 Extracción</h3>
+    <p>Los datos fueron extraídos desde un archivo JSON y normalizados con <code>pd.json_normalize</code>.</p>
+
+    <h3 class="subtitle">3.2 Transformación</h3>
+    <p>
+        Se realizaron conversiones de tipos, limpieza de nulos, renombrado de columnas,
+        creación de grupos de antigüedad, cargo mensual y perfil familiar.
+    </p>
+
+    <h3 class="subtitle">3.3 Análisis Exploratorio</h3>
+    <p>
+        Se evaluó la relación entre churn y variables clave mediante tablas porcentuales,
+        visualizaciones y comparativas.
+    </p>
+</div>
+
+<div class="section">
+    <h2>4. Hallazgos Clave</h2>
+
+    <h3 class="subtitle">4.1 Tipo de Contrato</h3>
+    <p>Los contratos Month-to-Month presentan la mayor tasa de abandono (~43%).</p>
+    
+    <table>
+        <caption>Tipo de Contrato vs Churn</caption>
+        <thead>
+            <tr>
+                <th>Tipo Contrato</th>
+                <th>Permanece (%)</th>
+                <th>Abandona (%)</th>
+                <th>Tasa Abandono (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Month-to-month</td>
+                <td>57.3</td>
+                <td>42.7</td>
+                <td><strong>42.7%</strong></td>
+            </tr>
+            <tr>
+                <td>One year</td>
+                <td>88.7</td>
+                <td>11.3</td>
+                <td>11.3%</td>
+            </tr>
+            <tr>
+                <td>Two year</td>
+                <td>97.2</td>
+                <td>2.8</td>
+                <td>2.8%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="img-container">
+        <img src="contrato_churn.png" alt="Gráfico Contrato">
+    </div>
+
+    <h3 class="subtitle">4.2 Antigüedad del Cliente</h3>
+    <p>Los clientes con 0–6 meses presentan un churn crítico del 53%.</p>
+
+    <table>
+        <caption>Antigüedad Cliente vs Churn</caption>
+        <thead>
+            <tr>
+                <th>Antigüedad</th>
+                <th>Permanece (%)</th>
+                <th>Abandona (%)</th>
+                <th>Tasa Abandono (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>0-6 meses</td>
+                <td>46.7</td>
+                <td>53.3</td>
+                <td><strong>53.3%</strong></td>
+            </tr>
+            <tr>
+                <td>7-12 meses</td>
+                <td>64.1</td>
+                <td>35.9</td>
+                <td>35.9%</td>
+            </tr>
+            <tr>
+                <td>13-24 meses</td>
+                <td>71.3</td>
+                <td>28.7</td>
+                <td>28.7%</td>
+            </tr>
+            <tr>
+                <td>24+ meses</td>
+                <td>86.0</td>
+                <td>14.0</td>
+                <td>14.0%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="img-container">
+        <img src="antiguedad.png" alt="Gráfico Antigüedad">
+    </div>
+
+    <h3 class="subtitle">4.3 Cargo Mensual</h3>
+    <p>Los cargos altos incrementan el churn hasta 37.5%.</p>
+
+    <table>
+        <caption>Cargo Mensual vs Churn</caption>
+        <thead>
+            <tr>
+                <th>Cargo Mensual</th>
+                <th>Permanece (%)</th>
+                <th>Abandona (%)</th>
+                <th>Tasa Abandono (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bajo</td>
+                <td>88.7</td>
+                <td>11.3</td>
+                <td>11.3%</td>
+            </tr>
+            <tr>
+                <td>Medio</td>
+                <td>75.4</td>
+                <td>24.6</td>
+                <td>24.6%</td>
+            </tr>
+            <tr>
+                <td>Alto</td>
+                <td>62.5</td>
+                <td>37.5</td>
+                <td><strong>37.5%</strong></td>
+            </tr>
+            <tr>
+                <td>Muy alto</td>
+                <td>67.1</td>
+                <td>32.9</td>
+                <td>32.9%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="img-container">
+        <img src="cargo_churn.png" alt="Gráfico Cargo">
+    </div>
+
+    <h3 class="subtitle">4.4 Método de Pago</h3>
+    <p>Electronic Check presenta la tasa más alta (45.3%).</p>
+
+    <table>
+        <caption>Método de Pago vs Churn</caption>
+        <thead>
+            <tr>
+                <th>Método Pago</th>
+                <th>Permanece (%)</th>
+                <th>Abandona (%)</th>
+                <th>Tasa Abandono (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bank transfer (automatic)</td>
+                <td>83.3</td>
+                <td>16.7</td>
+                <td>16.7%</td>
+            </tr>
+            <tr>
+                <td>Credit card (automatic)</td>
+                <td>84.7</td>
+                <td>15.3</td>
+                <td>15.3%</td>
+            </tr>
+            <tr>
+                <td>Electronic check</td>
+                <td>54.7</td>
+                <td>45.3</td>
+                <td><strong>45.3%</strong></td>
+            </tr>
+            <tr>
+                <td>Mailed check</td>
+                <td>80.8</td>
+                <td>19.2</td>
+                <td>19.2%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="img-container">
+        <img src="metodo_pago.png" alt="Gráfico Pago">
+    </div>
+
+    <h3 class="subtitle">4.5 Perfil Familiar</h3>
+    <p>El segmento más vulnerable es: Adulto mayor viviendo solo (49.2%).</p>
+
+    <table>
+        <caption>Perfil Familiar vs Churn</caption>
+        <thead>
+            <tr>
+                <th>Perfil Familiar</th>
+                <th>Permanece (%)</th>
+                <th>Abandona (%)</th>
+                <th>Tasa Abandono (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Adulto mayor viviendo solo</td>
+                <td>50.8</td>
+                <td>49.2</td>
+                <td><strong>49.2%</strong></td>
+            </tr>
+            <tr>
+                <td>Cliente con dependientes</td>
+                <td>78.6</td>
+                <td>21.4</td>
+                <td>21.4%</td>
+            </tr>
+            <tr>
+                <td>Cliente viviendo solo</td>
+                <td>68.8</td>
+                <td>31.2</td>
+                <td>31.2%</td>
+            </tr>
+            <tr>
+                <td>Pareja con dependientes</td>
+                <td>85.7</td>
+                <td>14.3</td>
+                <td>14.3%</td>
+            </tr>
+            <tr>
+                <td>Pareja sin dependientes</td>
+                <td>74.6</td>
+                <td>25.4</td>
+                <td>25.4%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="img-container">
+        <img src="perfil_familiar.png" alt="Gráfico Perfil">
+    </div>
+</div>
+
+<div class="section">
+    <h2>5. Drivers Principales de Abandono</h2>
+    
+    <table>
+        <caption>Ranking de Drivers de Churn</caption>
+        <thead>
+            <tr>
+                <th>Factor</th>
+                <th>Segmento de Mayor Riesgo</th>
+                <th>Tasa Abandono (%)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Antigüedad Cliente</td>
+                <td>0-6 meses</td>
+                <td><strong>53.3%</strong></td>
+            </tr>
+            <tr>
+                <td>Perfil Familiar</td>
+                <td>Adulto mayor viviendo solo</td>
+                <td>49.2%</td>
+            </tr>
+            <tr>
+                <td>Método de Pago</td>
+                <td>Electronic check</td>
+                <td>45.3%</td>
+            </tr>
+            <tr>
+                <td>Tipo de Contrato</td>
+                <td>Month-to-month</td>
+                <td>42.7%</td>
+            </tr>
+            <tr>
+                <td>Cargo Mensual</td>
+                <td>Alto</td>
+                <td>37.5%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="img-container">
+        <img src="drivers_abandono.png" alt="Gráfico Drivers">
+    </div>
+</div>
+
+<div class="section">
+    <h2>6. Conclusiones</h2>
+    <p>
+        El churn está fuertemente asociado a condiciones específicas del cliente y del servicio.
+        Los resultados permiten orientar estrategias de retención y sirven como base para un modelo predictivo.
+    </p>
+    <p>
+        <strong>Insight clave:</strong> El factor crítico es la antigüedad en los primeros 6 meses.
+        Una experiencia de onboarding mejorada podría reducir significativamente el abandono.
+    </p>
+</div>
+
+<div class="section">
+    <h2>7. Recomendaciones Estratégicas</h2>
+    <ul>
+        <li><strong>Fortalecer onboarding:</strong> Implementar programas de retención en primeros 6 meses (53.3% churn)</li>
+        <li><strong>Migrar contratos:</strong> Incentivar cambio Month-to-month → anuales (42.7% vs 2.8% churn)</li>
+        <li><strong>Revisar planes caros:</strong> Validar propuesta de valor en planes altos (37.5% churn)</li>
+        <li><strong>Pagos automáticos:</strong> Incentivar Bank transfer/Credit card vs Electronic check (45.3% churn)</li>
+        <li><strong>Programas senior:</strong> Diseñar soluciones para adultos mayores solos (49.2% churn)</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>8. Siguientes Pasos (Data Science)</h2>
+    <ul>
+        <li>Entrenar modelo predictivo de churn (Logistic Regression, XGBoost, Random Forest)</li>
+        <li>Evaluar importancia de variables y SHAP values</li>
+        <li>Construir dashboard de monitoreo en tiempo real</li>
+        <li>Integrar alertas tempranas en CRM para clientes en riesgo</li>
+        <li>A/B testing en estrategias de retención segmentadas</li>
+    </ul>
+</div>
+
+</body>
+</html>
+```
+
+---
